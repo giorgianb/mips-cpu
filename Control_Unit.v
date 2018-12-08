@@ -1,3 +1,5 @@
+`ifndef CONTROL_UNIT_INCLUDED
+`define CONTROL_UNIT_INCLUDED
 `include "Instructions.v"
 `include "ALU_Decoder.v"
 module Control_Unit(
@@ -88,3 +90,4 @@ ALU_Decoder U_ALU_DECODER (
 );
 
 endmodule
+`endif
