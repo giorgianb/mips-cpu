@@ -5,6 +5,7 @@
 module Control_Unit(
 	Op,
 	Funct,
+	Jump,
 	MemToReg,
 	MemWrite,
 	Branch,
@@ -15,6 +16,7 @@ module Control_Unit(
 );
 input [5:0] Op;
 input [5:0] Funct;
+output Jump;
 output MemToReg;
 output MemWrite;
 output Branch;
@@ -25,6 +27,7 @@ output RegWrite;
 
 wire [5:0] Op;
 wire [5:0] Funct;
+reg Jump;
 reg MemToReg;
 reg MemWrite;
 reg Branch;
@@ -41,6 +44,7 @@ begin
 		`R_TYPE:
 		begin
 			// Deal with R-type
+			Jump <= 0;
 			MemToReg <= 0;
 			MemWrite <= 0;
 			Branch <= 0;
@@ -60,6 +64,7 @@ begin
 		`LW:
 		begin
 			// Deal with lw
+			Jump <= 0;
 			MemToReg <= 1;
 			MemWrite <= 0;
 			Branch <= 0;
@@ -71,6 +76,7 @@ begin
 		`SW:
 		begin
 			// Deal with sw
+			Jump <= 0;
 			MemToReg <= 0;
 			MemWrite <= 1;
 			Branch <= 0;
