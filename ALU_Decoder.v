@@ -1,3 +1,5 @@
+`ifndef ALU_DECODER_INCLUDED
+`define ALU_CODER_INCLUDED
 `include "ALU.v"
 `include "funct.v"
 `define ALU_DECODER_ADD 2'b00
@@ -104,4 +106,4 @@ begin
 	end
 end
 endmodule
-
+`endif
