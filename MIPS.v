@@ -4,6 +4,7 @@
 `include "Mux_2_1.v"
 `include "Control_Unit.v"
 `include "Memory.v"
+`include "Sign_Extend.v"
 module MIPS();
 reg CLOCK;
 
@@ -96,6 +97,12 @@ Mux_2_1 Result_Mux(
 	.S(MemToReg),
 	.Q(Result)
 );
+
+Sign_Extend Sign_Extend(
+	.v(Instr[15:0]),
+	.sv(SignImm)
+);
+
 
 Mux_2_1 PCSrc_Mux(
 	.A(PCPlus4),
