@@ -1,3 +1,5 @@
+`ifndef ALU_INCLUDED
+`define ALU_INCLUDED
 `define ALU_ADD 3'b010
 `define ALU_SUBTRACT 3'b110
 `define ALU_AND 3'b000
@@ -6,21 +8,21 @@
 
 module ALU(
 	Control,
-	SrcA,
-	SrcB,
+	A,
+	B,
 	Result,
 	Zero
 );
 input [2:0] Control;
-input [7:0] SrcA;
-input [7:0] SrcB;
-output [7:0] Result;
+input [31:0] A;
+input [31:0] B;
+output [31:0] Result;
 output Zero;
 
 wire [2:0] Control;
-wire [7:0] SrcA;
-wire [7:0] SrcB;
-reg [7:0] Result;
+wire [31:0] A;
+wire [31:0] B;
+reg [31:0] Result;
 reg Zero;
 
 // TODO: fix this to make it nicer
@@ -29,30 +31,31 @@ begin
 	case (Control)
 		`ALU_ADD: 
 		begin
-			Result = SrcA + SrcB;
+			Result = A + B;
 			Zero <= (Result == 0);
 		end
 		`ALU_SUBTRACT: 
 		begin
-			Result = SrcA - SrcB;
+			Result = A - B;
 			Zero <= (Result == 0);
 		end
 		`ALU_AND: 
 		begin
-			Result = SrcA & SrcB;
+			Result = A & B;
 			Zero <= (Result == 0);
 		end
 		`ALU_OR: 
 		begin
-			Result = SrcA | SrcB;
+			Result = A | B;
 			Zero <= (Result == 0);
 		end
 		`ALU_SLT: 
 		begin
-			Result = (SrcA < SrcB) ? 1 : 0;
+			Result = (A < B) ? 1 : 0;
 			Zero <= (Result == 0);
 		end
 		default: $display("Unknown Control Signal: %g", Control);
 	endcase
 end
 endmodule	
+`endif
