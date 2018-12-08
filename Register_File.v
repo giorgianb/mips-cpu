@@ -1,3 +1,5 @@
+`ifndef REGISTER_FILE_INCLUDED
+`define REGISTER_FILE_INCLUDED
 module Register_File(
 	CLOCK,
 	A1,
@@ -36,3 +38,4 @@ begin
 		REGS[A3] <= WD;
 end
 endmodule
+`endif
