@@ -5,6 +5,7 @@
 `include "Control_Unit.v"
 `include "Memory.v"
 `include "Sign_Extend.v"
+`include "Control_Unit.v"
 module MIPS();
 reg CLOCK;
 
@@ -43,6 +44,19 @@ assign PCPlus4 = PC + 4;
 assign PCBranch = PCPlus4 + (SignImm << 2);
 assign PCJump = {PCPlus4[31:28], Instr[25:0], 2'b0};
 assign PCSrc = Branch && Zero;
+
+Control_Unit Control_Unit(
+	.Op(Instr[31:26]),
+	.Funct(Instr[5:0]),
+	.Jump(Jump),
+	.MemToReg(MemToReg),
+	.MemWrite(MemWrite),
+	.Branch(Branch),
+	.ALUControl(ALUControl),
+	.ALUSrc(ALUSrc),
+	.RegDst(RegDst),
+	.RegWrite(RegWrite)
+);
 
 Register PC_Register(
 	.CLOCK(CLOCK),
