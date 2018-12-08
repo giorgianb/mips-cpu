@@ -1,0 +1,5 @@
+`define FUNCT_ADD 4'b0000
+`define FUNCT_SUBTRACT 4'b0010
+`define FUNCT_AND 4'b0100
+`define FUNCT_OR 4'b0101
+`define FUNCT_SLT 4'b1010
