@@ -30,11 +30,15 @@ wire [31:0] WD;
 
 reg [31:0] REGS[31:0];
 
-always @ (posedge CLOCK)
+always @ (A1, A2)
 begin
 	RD1 <= REGS[A1];
 	RD2 <= REGS[A2];
-	if (WD)
+end
+
+always @ (negedge CLOCK)
+begin
+	if (WE)
 		REGS[A3] <= WD;
 end
 endmodule
