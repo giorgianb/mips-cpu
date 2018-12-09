@@ -6,6 +6,8 @@
 `include "Memory.v"
 `include "Sign_Extend.v"
 `include "Control_Unit.v"
+`include "funct.v"
+`include "Instruction_Memory.v"
 module MIPS();
 reg CLOCK;
 
@@ -38,6 +40,103 @@ wire ALUSrc;
 wire RegDst;
 wire RegWrite;
 
+integer i;
+initial
+begin
+	CLOCK <= 0;
+	PC_Register.Q = 0;
+
+	/* initialize all registers */
+	for (i = 0; i < 32; ++i)
+		Register_File.REGS[i] = i * 2 + 5;
+
+	Instruction_Memory.MEM[0][31:26] = `NOOP;
+
+	Instruction_Memory.MEM[4][31:26] = `R_TYPE;
+	Instruction_Memory.MEM[4][25:21] = 0;
+	Instruction_Memory.MEM[4][20:16] = 0;
+	Instruction_Memory.MEM[4][15:11] = 0;
+	Instruction_Memory.MEM[4][5:0] = `FUNCT_ADD;
+
+	Instruction_Memory.MEM[8][31:26] = `R_TYPE;
+	Instruction_Memory.MEM[8][25:21] = 0;
+	Instruction_Memory.MEM[8][20:16] = 0;
+	Instruction_Memory.MEM[8][15:11] = 0;
+	Instruction_Memory.MEM[8][5:0] = `FUNCT_ADD;
+
+	Instruction_Memory.MEM[12][31:26] = `R_TYPE;
+	Instruction_Memory.MEM[12][25:21] = 0;
+	Instruction_Memory.MEM[12][20:16] = 0;
+	Instruction_Memory.MEM[12][15:11] = 0;
+	Instruction_Memory.MEM[12][5:0] = `FUNCT_ADD;
+
+	Instruction_Memory.MEM[16][31:26] = `R_TYPE;
+	Instruction_Memory.MEM[16][25:21] = 0;
+	Instruction_Memory.MEM[16][20:16] = 0;
+	Instruction_Memory.MEM[16][15:11] = 0;
+	Instruction_Memory.MEM[16][5:0] = `FUNCT_ADD;
+
+	Instruction_Memory.MEM[20][31:26] = `R_TYPE;
+	Instruction_Memory.MEM[20][25:21] = 0;
+	Instruction_Memory.MEM[20][20:16] = 0;
+	Instruction_Memory.MEM[20][15:11] = 0;
+	Instruction_Memory.MEM[20][5:0] = `FUNCT_ADD;
+
+	Instruction_Memory.MEM[24][31:26] = `R_TYPE;
+	Instruction_Memory.MEM[24][25:21] = 0;
+	Instruction_Memory.MEM[24][20:16] = 0;
+	Instruction_Memory.MEM[24][15:11] = 0;
+	Instruction_Memory.MEM[24][5:0] = `FUNCT_ADD;
+
+	Instruction_Memory.MEM[28][31:26] = `R_TYPE;
+	Instruction_Memory.MEM[28][25:21] = 0;
+	Instruction_Memory.MEM[28][20:16] = 1;
+	Instruction_Memory.MEM[28][15:11] = 0;
+	Instruction_Memory.MEM[28][5:0] = `FUNCT_SUBTRACT;
+
+	Instruction_Memory.MEM[32][31:26] = `R_TYPE;
+	Instruction_Memory.MEM[32][25:21] = 0;
+	Instruction_Memory.MEM[32][20:16] = 1;
+	Instruction_Memory.MEM[32][15:11] = 0;
+	Instruction_Memory.MEM[32][5:0] = `FUNCT_SUBTRACT;
+
+
+	/* initialize PC Register */
+	#1 CLOCK <= 1;
+	PC_Register.Q = 0;
+	#1 CLOCK <= 0;
+
+//	$monitor("CLOCK: %g", CLOCK);
+	#91 for (i = 0; i < 32; ++i)
+		$write("%g ", Register_File.REGS[i]);
+	$finish;
+end
+
+always
+begin
+//	$display("(%g) Instruction: %b", CLOCK, Instr);
+//	$display("(%g) RD1 (%b): %b\tRD2 (%b): %b", CLOCK, Instr[25:21], RD1, Instr[20:16], RD2);
+//	$display("Stored PC: %b\n", PC_Register.Q);
+//	$display("PC: %g (%b)\tPC': %g (%b)", PC, PC, PC_Next, PC_Next);
+//	$display("Branch: %b, Zero: %b, Branch && Zero: %b", Branch, Zero, Branch && Zero);
+//	$display("PCPlus4: %b PCBranch: %b PCSrc: %b", PCPlus4, PCBranch, PCSrc);
+//	$display("PCSrcQ: %b PCJump: %b Jump: %b", PCSrcQ, PCJump, Jump);
+//	$display("PC: %g", PC);
+	#5 CLOCK <= ~CLOCK;
+
+
+end
+
+always
+begin
+	$display("PC: %g (%b)", PC, PC);
+	#10 for (i = 0; i < 32; ++i)
+		$write("%g ", Register_File.REGS[i]);
+	$display("");
+end
+
+
+
 assign SrcA = RD1;
 assign WriteData = RD2;
 assign PCPlus4 = PC + 4;
@@ -69,7 +168,7 @@ Memory Instruction_Memory(
 	.A(PC),
 	.D(Instr),
 	.WE(1'b0),
-	.WD(32'b0)
+	.WD(32'bx)
 );
 
 Register_File Register_File(
@@ -90,11 +189,21 @@ Mux_2_1 SrcB_Mux(
 	.Q(SrcB)
 );
 
+assign WriteReg = RegDst ? Instr[15:11] : Instr[20:16];
+
+//Mux_2_1 WriteReg_Mux(
+//	.A(Instr[20:16]),
+//	.B(Instr[15:11]),
+//	.Q(WriteReg),
+//	.S(RegDst)
+//);
+
 ALU ALU(
 	.A(SrcA),
 	.B(SrcB),
 	.Result(ALUResult),
-	.Zero(Zero)
+	.Zero(Zero),
+	.Control(ALUControl)
 );
 
 Memory Data_Memory(
