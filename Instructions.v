@@ -23,4 +23,6 @@
 `define SLTIU	6'b001011
 `define SW	6'b101011
 `define XORI	6'b001110
+
+`define NOOP 	6'b101010 // get rid of this once shift implemented
 `endif
