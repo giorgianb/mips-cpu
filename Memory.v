@@ -19,11 +19,10 @@ wire [31:0] WD;
 
 reg [31:0] MEM[65535:0];
 
-always @ (posedge CLOCK) 
+always @ (negedge CLOCK) 
 begin
 	if (WE)
 		MEM[A] <= WD;
-	else
-		D <= MEM[A];
+	D <= MEM[A];
 end
 endmodule
