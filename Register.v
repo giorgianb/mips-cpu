@@ -13,7 +13,7 @@ wire CLOCK;
 wire [31:0] D;
 reg [31:0] Q;
 
-always @ (posedge CLOCK)
+always @ (negedge CLOCK)
 begin
 	Q <= D;
 end
