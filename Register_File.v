@@ -30,7 +30,7 @@ wire [31:0] WD;
 
 reg [31:0] REGS[31:0];
 
-always @ (A1, A2)
+always @ (A1, A2, posedge CLOCK)
 begin
 	RD1 <= REGS[A1];
 	RD2 <= REGS[A2];
@@ -39,7 +39,10 @@ end
 always @ (negedge CLOCK)
 begin
 	if (WE)
+	begin
+		$display("Reg[%g] = %g", A3, WD);
 		REGS[A3] <= WD;
+	end
 end
 endmodule
 `endif
