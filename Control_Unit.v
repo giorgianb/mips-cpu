@@ -40,6 +40,7 @@ reg [1:0] ALUOp;
 
 always @*
 begin
+//	$display("Control_Unit: Op: %b\tFunct: %b", Op, Funct);
 	case (Op)
 		`R_TYPE:
 		begin
@@ -84,8 +85,16 @@ begin
 			ALUSrc <= 1; // Use sign-extended immediate
 			RegDst <= 1'bx;
 		end
+		`NOOP:
+		begin
+			Jump <= 0;
+			MemToReg <= 0;
+			MemWrite <= 0;
+			Branch <= 0;
+		end
+
 		default:
-			$display ("Unsupported instruction %g", Op);
+			$display ("Unsupported instruction %b", Op);
 	endcase
 end
 
